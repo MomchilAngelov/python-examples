@@ -31,7 +31,7 @@ def infinite_delim(alphabet, _string):
 
 	return end2
 
-_string = "Кур, bitch, swag: sgae\sad, tis's1's2/bej]sad"
+_string = "плиз, класк, swag: sgae\sad, tis's1's2/bej]sad"
 alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЗЧШЩЪЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890абвгдежзийклмнопрстуфхцчшщъьюяabcdefghijklmnopqrstuvwxyz'' "
 
 print(_string)
