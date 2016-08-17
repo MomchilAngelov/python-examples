@@ -90,21 +90,28 @@ class MyHTMLParser(HTMLParser):
 					#rename the url to where the image will be saved
 					#because if it contains /, it's inside some directory
 					#structure, so we relpace the / with |, as a rather rare symbol
-					image_url = fixed_url.replace("/", "->")
+					
+					image_url = fixed_url.replace("/", "/")
 
 					
 					if image_url not in all_visited_pictures:
 						all_visited_pictures[image_url] = 1
-						download_image(dest = "data_downloaded/"+image_url, source = fixed_url)
+					#	download_image(dest = "data_downloaded/"+image_url, source = fixed_url)
 
 		if tag == "a":
-			for attribute in attrs:
-				if attribute[0]=='href':
-					fixed_url = attribute[1]
-					if attribute[1][0:4] != "http":
-						fixed_url = global_url + attribute[1][1:len(attribute[1])]
-					if not_visited(url = fixed_url):
-						add_to_visited(fixed_url)
+			try:
+				for attribute in attrs:
+					if attribute[0]=='href':
+						fixed_url = attribute[1]
+						if attribute[1][0:4] != "http":
+							if attribute[1][0] == "/":
+								fixed_url = global_url + attribute[1][1:len(attribute[1])]
+							else:
+								fixed_url = global_url + attribute[1]							
+						if not_visited(url = fixed_url):
+							add_to_visited(fixed_url)
+			except IndexError as e:
+				print("Index error caught...")
 
 parser = MyHTMLParser()
 
