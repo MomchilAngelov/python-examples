@@ -4,7 +4,7 @@ def draw_square(chess):
 	chess.begin_fill()
 	for i in range(4):
 		chess.left(90)
-		chess.fd(40)
+		chess.fd(50)
 	chess.end_fill()
 
 def draw_row(chess, row):
@@ -15,15 +15,15 @@ def draw_row(chess, row):
 			chess.fillcolor("white")
 
 		chess.pu()
-		chess.setpos(y * 40 + start_x, x * 40 + start_y)
+		chess.setpos(y * 50 + start_x, x * 50 + start_y)
 		chess.pd()
 		draw_square(chess)
 
 
 chess = Turtle()
 chess.speed(0)
-start_x = -160
-start_y = -160
+start_x = -200
+start_y = -200
 chess.pu()
 chess.setpos(start_x, start_y)
 chess.pd()
