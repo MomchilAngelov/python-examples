@@ -151,5 +151,3 @@ for human in people:
 		
 		if conditions(this_human, other_human):
 			this_human.print_result(other_human)
-
-			
