@@ -104,25 +104,45 @@ people = [
     },
 ]
 
+class Human():
+	def __init__(self, age, name, exes, interests, gender):
+		self.age = age 
+		self.name = name
+		self.exes = exes
+		self.interests = interests
+		self.gender = gender
+
+	def get_exes_count(self, other):
+		return len(self.exes & other.exes)
+
+	def get_common_interests(self, other):
+		return self.interests & other.interests
+
+	def age_difference(self, other):
+		return abs(self.age - other.age)
+
+	def different_gender(self, other):
+		return not self.gender is other.gender
+
+	def print_result(self, other):
+		print("Влюбихме " + self.name + " и " + other.name + " на база това, че имат " + str(self.age_difference(other)) +
+		" години разлика, и че те харесват ", end="")
+		for key in self.get_common_interests(other):
+			print(key, end=", ")
+		print("")
+
 for human in people:
-	gender = human.get('gender')
-	name = human.get('name')
-	interests = set(human.get('interests'))
-	years = human.get('age')
-	exes = set(human.get('ex'))
+	this_human = Human(human.get('age'), human.get('name'), set(human.get('ex')), set(human.get('interests')), human.get('gender'))
 
 	for other_humans in people:
-		gender_other = other_humans.get('gender')
-		if not gender_other is gender:
-			interests_other = set(other_humans.get('interests'))
-			years_other = other_humans.get('age')
-			mutual_interests = interests & interests_other
-			age_difference = abs(years - years_other)
-			exes_other = set(other_humans.get('ex'))
-			mutual_exes = exes & exes_other
-			if (len(mutual_interests) > 0) and (age_difference < 7) and (len(mutual_exes) == 0):
-				name_other = other_humans.get('name')
-				print("Влюбихме " + name + " и " + name_other + " на база това, че имат " + str(age_difference) + " години разлика, и че те харесват ", end="")
-				for key in mutual_interests:
-					print(key, end=", ")
-				print("")
+		other_human = Human(other_humans.get('age'), other_humans.get('name'), 
+		set(other_humans.get('ex')), set(other_humans.get('interests')), other_humans.get('gender'))
+		
+		if ( 
+				(this_human.age_difference(other_human) < 7) 
+			and (this_human.different_gender(other_human)) 
+			and (len(this_human.get_common_interests(other_human)) > 0) 
+			and (this_human.get_exes_count(other_human) == 0)
+			):
+
+			this_human.print_result(other_human)
