@@ -9,7 +9,7 @@ people = [
         'interests': ['пътуване', 'танци', 'плуване', 'кино'],
         'age': 24,
         'gender': "female",
-        "ex": ["Кирил", "Петър"],
+        "ex": ["Кирил", "Петър", "Андрей"],
     },
     {
         'name': "Диана",
@@ -131,6 +131,17 @@ class Human():
 			print(key, end=", ")
 		print("")
 
+def conditions(human1, human2):
+	if not human1.age_difference(human2) < 7:
+		return False
+	if not human1.different_gender(human2):
+		return False
+	if not len(human1.get_common_interests(human2)) > 0:
+		return False
+	if not human1.get_exes_count(human2) == 0:
+		return False
+	return True
+
 for human in people:
 	this_human = Human(human.get('age'), human.get('name'), set(human.get('ex')), set(human.get('interests')), human.get('gender'))
 
@@ -138,11 +149,5 @@ for human in people:
 		other_human = Human(other_humans.get('age'), other_humans.get('name'), 
 		set(other_humans.get('ex')), set(other_humans.get('interests')), other_humans.get('gender'))
 		
-		if ( 
-				(this_human.age_difference(other_human) < 7) 
-			and (this_human.different_gender(other_human)) 
-			and (len(this_human.get_common_interests(other_human)) > 0) 
-			and (this_human.get_exes_count(other_human) == 0)
-			):
-
+		if conditions(this_human, other_human):
 			this_human.print_result(other_human)
