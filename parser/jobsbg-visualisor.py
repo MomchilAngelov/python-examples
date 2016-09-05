@@ -3,6 +3,7 @@ php_candidates = []
 java_candidates = []
 javascript_candidates = []
 c_candidates = []
+intern_candidates = []
 
 def database_candidate(string):
 	if "MySQL" in string:
@@ -50,6 +51,8 @@ def c_candidate(string):
 def javascript_candidate(string):
 	if "Javascript" in string:
 		return 1
+	if "JavaScript" in string:
+		return 1
 	if "javascript" in string:
 		return 1
 	if "JAVASCRIPT" in string:
@@ -62,6 +65,23 @@ def javascript_candidate(string):
 		return 1
 	return 0
 
+def intern_candidate(string):
+	if "Стажант" in string:
+		return 1
+	if "Стаж" in string:
+		return 1
+	if "стажант" in string:
+		return 1
+	if "стаж" in string:
+		return 1
+	if "Intern" in string:
+		return 1
+	if "intern" in string:
+		return 1
+	if "INTERN" in string:
+		return 1
+	return 0
+
 
 with open("jobsbgparserdata", "r") as f:
 	data = f.readline()
@@ -71,16 +91,19 @@ with open("jobsbgparserdata", "r") as f:
 			database_candidates.append(data)
 
 		if php_candidate(data):
-					php_candidates.append(data)
+			php_candidates.append(data)
 
 		if java_candidate(data):
-					java_candidates.append(data)
+			java_candidates.append(data)
 
 		if javascript_candidate(data):
-					javascript_candidates.append(data)
+			javascript_candidates.append(data)
 
 		if c_candidate(data):
-					c_candidates.append(data)
+			c_candidates.append(data)
+
+		if intern_candidate(data):
+			intern_candidates.append(data)
 
 		data = f.readline()
 
@@ -103,6 +126,10 @@ for entry in javascript_candidates:
 
 print("C/C++/C# candidates: ", len(c_candidates))
 for entry in c_candidates:
+	print("\t",entry, end="")
+
+print("Стажове: ", len(intern_candidates))
+for entry in intern_candidates:
 	print("\t",entry, end="")
 
 
