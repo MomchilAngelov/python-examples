@@ -5,14 +5,10 @@ cities = []
 missing_data = {}
 
 with open("city-data.csv", "r") as f:
-	data = f.readline()
-
-	while data:
-		data = data.split(",")
+	for line in f:
+		data = line.split(",")
 
 		date_to_cities.setdefault(data[0], []).append(data[1])
-
-		data = f.readline()
 
 for k, v in date_to_cities.items():
 	for city in v:

@@ -8,21 +8,16 @@ except:
 	print("Invalid input")
 
 with open(input("Данни: "), "r") as f:
-	data = f.readline()
-
-	while data:
-		if data == "\n":
-			data = f.readline()
+	for line in f:
+		if line == "\n":
 			continue
 
-		data = data.split(" ")[1].split(",")
+		data = line.split(" ")[1].split(",")
 		name = data[0]
 		r = float(data[1]) / 10
 		h = float(data[2]) / 10
 		area = r*r * 3.14 * h
 		all_data[name] = area
-
-		data = f.readline()
 
 tuples = sorted(all_data.items(), key=operator.itemgetter(1))
 

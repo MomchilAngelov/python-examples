@@ -4,14 +4,11 @@ x = 0
 y = 0
 
 with open(sys.argv[1], "r") as f:
-	data = f.readline()
-
-	while data:
-		if data == "\n":
-			data = f.readline()
+	for line in f:
+		if line == "\n":
 			continue
 
-		data = data.split(" ")
+		data = line.split(" ")
 		if data[0] == "up":
 			y += float(data[1])
 		if data[0] == "down":
@@ -21,6 +18,5 @@ with open(sys.argv[1], "r") as f:
 			x -= float(data[1])
 		if data[0] == "right":
 			x += float(data[1])
-		data = f.readline()
 	
 	print("x: ",round(x, 3),"\ny:", round(y, 3))
