@@ -5,9 +5,31 @@ javascript_candidates = ['JavaScript candidates']
 c_candidates = ['C/C++/C# candidates']
 python_candidates = ['Python candidates']
 intern_candidates = ['Intern candidates']
+frontend_candidates = ['Front-End candidates']
 
 all_candidates = [database_candidates, php_candidates, javascript_candidates, 
-					java_candidates, c_candidates, python_candidates, intern_candidates]
+					java_candidates, c_candidates, python_candidates, intern_candidates, 
+						frontend_candidates,]
+all_candidates_names = ['database_candidate', 'php_candidate', 'javascript_candidate', 
+						'java_candidate', 'c_candidate', 'python_candidate', 'intern_candidate', 
+							'frontend_candidate',]
+def frontend_candidate(string):
+	if "frontend" in string:
+		return 1
+	if "FrontEnd" in string:
+		return 1
+	if "Front-End" in string:
+		return 1
+	if "Front End" in string:
+		return 1
+	if "Front end" in string:
+		return 1
+	if "front end" in string:
+		return 1
+	if "front-end" in string:
+		return 1
+	return 0
+
 
 def database_candidate(string):
 	if "MySQL" in string:
@@ -102,26 +124,9 @@ def intern_candidate(string):
 
 with open("jobsbgparserdata", "r") as f:
 	for data in f:
-		if database_candidate(data):
-			database_candidates.append(data)
-
-		if php_candidate(data):
-			php_candidates.append(data)
-
-		if java_candidate(data):
-			java_candidates.append(data)
-
-		if javascript_candidate(data):
-			javascript_candidates.append(data)
-
-		if c_candidate(data):
-			c_candidates.append(data)
-
-		if intern_candidate(data):
-			intern_candidates.append(data)
-
-		if python_candidate(data):
-			python_candidates.append(data)
+		for name in all_candidates_names:
+			if eval(name+"(data)"):
+				eval(name+"s.append(data)")
 
 with open("visualised_results.html", "w") as f:
 	f.write("<html>")
@@ -130,7 +135,8 @@ with open("visualised_results.html", "w") as f:
 	f.write("Визуализирани данни!")
 	f.write("</title>")
 	f.write("<style>")
-	f.write("table, th, td {border: 1px solid black}")
+	f.write("table, th, td {border: 1px solid black}\n")
+	f.write("table tr:nth-child(2n+3) {background-color: #D6D6D8}")
 	f.write("</style>")
 	f.write("<meta charset='UTF-8'>")
 	f.write("</head>")
@@ -138,7 +144,7 @@ with open("visualised_results.html", "w") as f:
 	for candidates in all_candidates:
 
 		f.write("<h1>")
-		f.write(candidates.pop(0))
+		f.write(candidates.pop(0) + " - брой обяви: " + str(len(candidates)))
 		f.write("</h1>")
 
 		f.write("<table>")
@@ -163,7 +169,7 @@ with open("visualised_results.html", "w") as f:
 			f.write("</td>")
 			
 			f.write("<td>")
-			f.write("<a href='{0}' target='blank'>".format(entry[1]))
+			f.write("<a href='{0}' target='_blank'>".format(entry[1]))
 			f.write("Линк")
 			f.write("</a>")
 			f.write("</td>")
@@ -174,7 +180,6 @@ with open("visualised_results.html", "w") as f:
 		f.write("</table>")
 	f.write("</body>")
 	f.write("</html>")
-
 
 '''
 print("Database candidates: ", len(database_candidates))
@@ -232,4 +237,15 @@ for entry in intern_candidates:
 	maximum_size = 100
 	number_of_spaces = maximum_size - size_of_string
 	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
+'''
+'''
+json_data = {}
+for candidate in all_candidates:
+	candidate_entry = candidate.pop(0)
+	json_data[candidate_entry] = []
+	for entry in candidate:
+		data = entry.split("|")
+		entry_data_json = {'url': data[1].strip(), 'title': data[0].strip()}
+		json_data[candidate_entry].append(entry_data_json)
+print("\"",json_data,"\"", end="")
 '''
