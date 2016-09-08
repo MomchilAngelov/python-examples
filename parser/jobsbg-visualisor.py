@@ -3,6 +3,7 @@ php_candidates = []
 java_candidates = []
 javascript_candidates = []
 c_candidates = []
+python_candidates = []
 intern_candidates = []
 
 def database_candidate(string):
@@ -65,6 +66,19 @@ def javascript_candidate(string):
 		return 1
 	return 0
 
+def python_candidate(string):
+	if "Python" in string:
+		return 1
+	if "python" in string:
+		return 1
+	if "Django" in string:
+		return 1
+	if "Python/Django" in string:
+		return 1
+	if "django" in string:
+		return 1
+	return 0
+
 def intern_candidate(string):
 	if "Стажант" in string:
 		return 1
@@ -84,9 +98,7 @@ def intern_candidate(string):
 
 
 with open("jobsbgparserdata", "r") as f:
-	data = f.readline()
-
-	while data:
+	for data in f:
 		if database_candidate(data):
 			database_candidates.append(data)
 
@@ -105,32 +117,65 @@ with open("jobsbgparserdata", "r") as f:
 		if intern_candidate(data):
 			intern_candidates.append(data)
 
-		data = f.readline()
+		if python_candidate(data):
+			python_candidates.append(data)
 
 #'''
 print("Database candidates: ", len(database_candidates))
 for entry in database_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 print("PHP candidates: ", len(php_candidates))
 for entry in php_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 print("Java candidates: ", len(java_candidates))
 for entry in java_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 print("Javascript candidates: ", len(javascript_candidates))
 for entry in javascript_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 print("C/C++/C# candidates: ", len(c_candidates))
 for entry in c_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
+
+print("Python candidates: ", len(python_candidates))
+for entry in python_candidates:
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 print("Стажове: ", len(intern_candidates))
 for entry in intern_candidates:
-	print("\t",entry, end="")
+	entry = entry.split("|")
+	size_of_string = len(entry[0])
+	maximum_size = 100
+	number_of_spaces = maximum_size - size_of_string
+	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
 
 
 #'''
