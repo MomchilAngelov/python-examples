@@ -1,10 +1,13 @@
-database_candidates = []
-php_candidates = []
-java_candidates = []
-javascript_candidates = []
-c_candidates = []
-python_candidates = []
-intern_candidates = []
+database_candidates = ['Database candidates']
+php_candidates = ['PHP candidates']
+java_candidates = ['JAVA candidates']
+javascript_candidates = ['JavaScript candidates']
+c_candidates = ['C/C++/C# candidates']
+python_candidates = ['Python candidates']
+intern_candidates = ['Intern candidates']
+
+all_candidates = [database_candidates, php_candidates, javascript_candidates, 
+					java_candidates, c_candidates, python_candidates, intern_candidates]
 
 def database_candidate(string):
 	if "MySQL" in string:
@@ -120,7 +123,60 @@ with open("jobsbgparserdata", "r") as f:
 		if python_candidate(data):
 			python_candidates.append(data)
 
-#'''
+with open("visualised_results.html", "w") as f:
+	f.write("<html>")
+	f.write("<head>")
+	f.write("<title>")
+	f.write("Визуализирани данни!")
+	f.write("</title>")
+	f.write("<style>")
+	f.write("table, th, td {border: 1px solid black}")
+	f.write("</style>")
+	f.write("<meta charset='UTF-8'>")
+	f.write("</head>")
+	f.write("<body>")
+	for candidates in all_candidates:
+
+		f.write("<h1>")
+		f.write(candidates.pop(0))
+		f.write("</h1>")
+
+		f.write("<table>")
+
+		f.write("<tr>")
+		f.write("<th>")
+		f.write("Титла")
+		f.write("</th>")
+		f.write("<th>")
+		f.write("Линк към работата")	
+		f.write("</th>")
+		f.write("</tr>")
+
+		for entry in candidates:
+			entry = entry.split("|")
+
+			f.write("<tr>")
+
+			
+			f.write("<td>")
+			f.write(entry[0])
+			f.write("</td>")
+			
+			f.write("<td>")
+			f.write("<a href='{0}' target='blank'>".format(entry[1]))
+			f.write("Линк")
+			f.write("</a>")
+			f.write("</td>")
+
+
+			f.write("</tr>")
+
+		f.write("</table>")
+	f.write("</body>")
+	f.write("</html>")
+
+
+'''
 print("Database candidates: ", len(database_candidates))
 for entry in database_candidates:
 	entry = entry.split("|")
@@ -176,6 +232,4 @@ for entry in intern_candidates:
 	maximum_size = 100
 	number_of_spaces = maximum_size - size_of_string
 	print("\t",entry[0]," "*number_of_spaces, entry[1].strip() , end="\n")
-
-
-#'''
+'''
