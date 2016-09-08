@@ -71,10 +71,7 @@ with open(data) as f:
 
 
 		hour = date.replace(minute=0, second=0, microsecond=0)
-		if hour not in hour_to_money:
-			hour_to_money[hour] = money
-		else:
-			hour_to_money[hour] += money
+		hour_to_money[hour] = hour_to_money.get(hour, 0) + money
 
 		line = f.readline()
 
