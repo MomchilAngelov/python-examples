@@ -7,9 +7,23 @@ from html.parser import HTMLParser
 
 urllib3.disable_warnings()
 
-begin = int(time.time())
 number_of_results = 0
-base_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&zone_id=9&is_region=0&all_cities=0&categories%5B0%5D=15&all_position_level=1&all_company_type=1&keyword=&last=0#paging"
+city = 'sofia'
+city_data = {
+	'sofia': 1,
+	'plovdiv': 2,
+	'varna': 3,
+	'burgas': 4,
+	'blagoevgrad': 6,
+	'veliko tarnovo': 7,
+	'vidin': 8,
+	'vraca': 9,
+	'gabrovo': 10,
+	'dobrich': 11,
+	'kardjali': 12,
+	'kjustendil': 13,
+}
+base_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&cities%5B%5D={1}&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1&keyword="
 regex_results = re.compile(r'[0-9] - [0-9][0-9] от (\d+)')
 
 
@@ -75,7 +89,7 @@ parser = JobsBGParser()
 
 http = urllib3.PoolManager()
 
-request = http.request('GET', base_string.format(0))
+request = http.request('GET', base_string.format(0, city_data[city]))
 counter.feed(str(request.data, 'utf-8'))
 counter.close()
 
@@ -84,7 +98,7 @@ with open("jobsbgparserdata", "w") as f:
 	for x in range(0, number_of_results, 15):
 		print("Making query on result:",x,"-",x+15)
 
-		request = http.request('GET', base_string.format(x))
+		request = http.request('GET', base_string.format(x, city_data[city]))
 		parser.feed( str(request.data, 'utf-8') )
 
 		for title in parser.data:
