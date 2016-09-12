@@ -7,9 +7,11 @@ python_candidates = ['Python candidates']
 intern_candidates = ['Intern candidates']
 frontend_candidates = ['Front-End candidates']
 
+python_org_candidates = ['Python.org candidates']
+
 all_candidates = [database_candidates, php_candidates, javascript_candidates, 
 					java_candidates, c_candidates, python_candidates, intern_candidates, 
-						frontend_candidates,]
+						frontend_candidates,python_org_candidates, ]
 all_candidates_names = ['database_candidate', 'php_candidate', 'javascript_candidate', 
 						'java_candidate', 'c_candidate', 'python_candidate', 'intern_candidate', 
 							'frontend_candidate',]
@@ -123,10 +125,18 @@ def intern_candidate(string):
 
 
 with open("jobsbgparserdata", "r") as f:
+	flag_for_not_jobs_bg = 0
 	for data in f:
-		for name in all_candidates_names:
-			if eval(name+"(data)"):
-				eval(name+"s.append(data)")
+		data = data.strip()
+		if data == "SENTINEL DATA":
+			flag_for_not_jobs_bg = 1
+			continue
+		if flag_for_not_jobs_bg:
+			python_org_candidates.append(data)
+		else:
+			for name in all_candidates_names:
+				if eval(name+"(data)"):
+					eval(name+"s.append(data)")
 
 with open("visualised_results.html", "w") as f:
 	f.write("<html>")

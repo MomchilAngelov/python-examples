@@ -23,8 +23,11 @@ city_data = {
 	'kardjali': 12,
 	'kjustendil': 13,
 }
-base_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&cities%5B%5D={1}&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1&keyword="
+base_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&cities%5B%5D="+str(city_data[city])+"&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1&keyword="
+python_string = "https://www.python.org/jobs/?page={0}"
+
 regex_results = re.compile(r'[0-9] - [0-9][0-9] от (\d+)')
+python_net_regex = re.compile(r"/jobs/\d+/")
 
 
 class ResultsCountGetter(HTMLParser):
@@ -59,6 +62,7 @@ class ResultsCountGetter(HTMLParser):
 				global number_of_results
 				number_of_results = int(m.groups()[0])
 
+
 class JobsBGParser(HTMLParser):
 	def __init__(self):
 		HTMLParser.__init__(self)
@@ -81,7 +85,55 @@ class JobsBGParser(HTMLParser):
 
 	def handle_data(self, data):
 		if self.recording:
-			self.data.append(data + "| https://www.jobs.bg/" + self.link_string)
+			self.data.append(data + " | https://www.jobs.bg/" + self.link_string)
+
+
+#https://www.python.org/jobs/
+class PagesGetter(HTMLParser):
+	def __init__(self):
+		HTMLParser.__init__(self)
+		self.recording = 0 
+		self.data = []
+	def handle_starttag(self, tag, attrs):
+		if tag == "a" and "?page=" in attrs[0]:
+			self.recording = 1
+		
+	def handle_endtag(self, tag):
+		if tag == 'a':
+			self.recording -= 1
+		
+	def handle_data(self, data):
+		if self.recording:
+			try:
+				value = int(data)
+				self.data.append(value)
+			except Exception as e:
+				pass
+
+
+class PythonJobsParser(HTMLParser):
+	def __init__(self):
+		HTMLParser.__init__(self)
+		self.recording = 0 
+		self.data = []
+		self.link_string = ""
+
+	def handle_starttag(self, tag, attrs):
+		if tag == "a":
+			for name, value in attrs:
+				if name == "href":
+					if python_net_regex.match(value):
+						self.link_string = value
+						self.recording = 1
+
+
+	def handle_endtag(self, tag):
+		if tag == "a":
+			self.recording = 0
+
+	def handle_data(self, data):
+		if self.recording:
+			self.data.append(data + " | https://www.python.org/" + self.link_string)
 
 
 counter = ResultsCountGetter()
@@ -89,7 +141,8 @@ parser = JobsBGParser()
 
 http = urllib3.PoolManager()
 
-request = http.request('GET', base_string.format(0, city_data[city]))
+
+request = http.request('GET', base_string.format(0))
 counter.feed(str(request.data, 'utf-8'))
 counter.close()
 
@@ -98,9 +151,29 @@ with open("jobsbgparserdata", "w") as f:
 	for x in range(0, number_of_results, 15):
 		print("Making query on result:",x,"-",x+15)
 
-		request = http.request('GET', base_string.format(x, city_data[city]))
+		request = http.request('GET', base_string.format(x))
 		parser.feed( str(request.data, 'utf-8') )
 
 		for title in parser.data:
 			f.write("{0}\n".format(title))
 		parser.data = []
+
+	f.write("SENTINEL DATA\n")
+	
+	page_count_getter = PagesGetter()
+	python_org_parser = PythonJobsParser()
+	
+	request = http.request('GET', python_string.format(1))
+
+	page_count_getter.feed(str(request.data, 'utf-8'))
+	page_count_getter.close()
+
+	pages = max(page_count_getter.data)
+
+	for x in range(1, pages + 1):
+		request = http.request('GET', python_string.format(x))
+		python_org_parser.feed(str(request.data, 'utf-8'))
+
+		for title in python_org_parser.data:
+			f.write("{0}\n".format(title))
+		python_org_parser.data = []
