@@ -254,8 +254,11 @@ for candidate in all_candidates:
 	candidate_entry = candidate.pop(0)
 	json_data[candidate_entry] = []
 	for entry in candidate:
-		data = entry.split("|")
-		entry_data_json = {'url': data[1].strip(), 'title': data[0].strip()}
-		json_data[candidate_entry].append(entry_data_json)
+		try:
+			data = entry.split("|")
+			entry_data_json = {'url': data[1].strip(), 'title': data[0].strip()}
+			json_data[candidate_entry].append(entry_data_json)
+		except Exception as e:
+			print(e)
 print("\"",json_data,"\"", end="")
 '''
