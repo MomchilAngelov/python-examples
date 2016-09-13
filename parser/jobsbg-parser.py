@@ -9,6 +9,9 @@ urllib3.disable_warnings()
 
 threadLock = threading.Lock()
 
+n_threads = 3
+threads = []
+
 class NetworkParser(threading.Thread):
 	def __init__(self, http, url, start_value, end_value, file_handler):
 		threading.Thread.__init__(self)
@@ -86,17 +89,15 @@ with open("jobsbgparserdata", "w") as f:
 				if data.get('class')[0] == "joblink":
 					f.write("{0} | {1}\n".format(data.string, "https://www.jobs.bg/"+data.get('href')))
 	'''
-	thread_1 = NetworkParser(http = http, url = jobs_bg_string, start_value = 0, end_value = int(number_of_results/3), file_handler = f)
-	thread_2 = NetworkParser(http = http, url = jobs_bg_string, start_value = int(number_of_results/3), end_value = int(number_of_results/3) * 2, file_handler = f)
-	thread_3 = NetworkParser(http = http, url = jobs_bg_string, start_value = int(number_of_results/3) * 2, end_value = number_of_results, file_handler = f)
+	for k in range(n_threads):
+		thread = NetworkParser(http = http, url = jobs_bg_string, start_value = (0+k) * int(number_of_results/n_threads), end_value = (1+k) * int(number_of_results/n_threads), file_handler = f)
+		threads.append(thread)
 
-	thread_1.start()
-	thread_2.start()
-	thread_3.start()
+	for thread in threads:
+		thread.start()
 
-	thread_1.join()
-	thread_2.join()
-	thread_3.join()
+	for thread in threads:
+		thread.join()
 
 	f.write("SENTINEL DATA\n")
 	'''
