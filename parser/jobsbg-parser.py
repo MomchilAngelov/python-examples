@@ -34,7 +34,9 @@ python_net_regex = re.compile(r"/jobs/\d+/")
 http = urllib3.PoolManager()
 
 with open("jobsbgparserdata", "w") as f:
-
+	'''
+		The beggining of the jobs.bg parser
+	'''
 	request = http.request('GET', base_string.format(0))
 	soup = BeautifulSoup(str(request.data, 'utf-8'), 'html.parser')
 	for data in soup.find_all('td'):
@@ -54,7 +56,9 @@ with open("jobsbgparserdata", "w") as f:
 					f.write("{0} | {1}\n".format(data.string, "https://www.jobs.bg/"+data.get('href')))
 
 	f.write("SENTINEL DATA\n")
-
+	'''
+		The beggining of the python.org parser
+	'''
 	request = http.request('GET', python_string.format(1))
 	soup = BeautifulSoup(str(request.data, 'utf-8'), 'html.parser')
 	for link_href in soup.find_all('a'):
@@ -71,4 +75,4 @@ with open("jobsbgparserdata", "w") as f:
 		for data in soup.find_all('a'):
 			m = python_net_regex.match(data.get('href'))
 			if m:
-				f.write("{0} | {1}\n".format(data.string, "https://www.python.org" + data.get('href')))
+				f.write("{0} | {1}\n".format(data.string, "https://www.python.org" + data.get('href') ) )
