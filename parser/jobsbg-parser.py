@@ -56,7 +56,9 @@ city_data = {
 	'kjustendil': 13,
 }
 
-jobs_bg_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&cities%5B%5D="+str(city_data[city])+"&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1&keyword="
+jobs_bg_string = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&cities%5B%5D="\
+					+ str(city_data[city]) + \
+					"&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1&keyword="
 python_string = "https://www.python.org/jobs/?page={0}"
 
 jobs_bg_regex_results = re.compile(r'[0-9] - [0-9][0-9] от (\d+)')
@@ -78,19 +80,12 @@ with open("jobsbgparserdata", "w") as f:
 		if groups: 
 			number_of_results = (int(groups.groups()[0]))
 			break
-	print("Number of results:", number_of_results)
-	'''
-	for x in range(0, number_of_results, 15):
-		print("Query {0}-{1}".format(x, x+15))
-		request = http.request('GET', jobs_bg_string.format(x))
-		soup = BeautifulSoup(str(request.data, 'utf-8'), 'html.parser')
-		for data in soup.find_all('a'):
-			if data.get('class'):
-				if data.get('class')[0] == "joblink":
-					f.write("{0} | {1}\n".format(data.string, "https://www.jobs.bg/"+data.get('href')))
-	'''
+
 	for k in range(n_threads):
-		thread = NetworkParser(http = http, url = jobs_bg_string, start_value = (0+k) * int(number_of_results/n_threads), end_value = (1+k) * int(number_of_results/n_threads), file_handler = f)
+		thread = NetworkParser(http = http, url = jobs_bg_string, 
+								start_value = (0+k) * int(number_of_results/n_threads),
+								  end_value = (1+k) * int(number_of_results/n_threads),
+								  file_handler = f)
 		threads.append(thread)
 
 	for thread in threads:
@@ -117,6 +112,8 @@ with open("jobsbgparserdata", "w") as f:
 		request = http.request('GET', python_string.format(x))
 		soup = BeautifulSoup(str(request.data, 'utf-8'), 'html.parser')
 		for data in soup.find_all('a'):
-			m = python_jobs_getter_regex.match(data.get('href'))
+			href = data.get('href')
+			m = python_jobs_getter_regex.match(href)
 			if m:
-				f.write("{0} | {1}\n".format(data.string, "https://www.python.org" + data.get('href') ) )
+				full_href = "https://www.python.org" + href
+				f.write("{0} | {1}\n".format(data.string, full_href))
