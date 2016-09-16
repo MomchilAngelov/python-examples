@@ -9,7 +9,7 @@ urllib3.disable_warnings()
 
 threadLock = threading.Lock()
 
-n_threads = 3
+n_threads = 4
 threads = []
 
 class NetworkParser(threading.Thread):

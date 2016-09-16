@@ -145,10 +145,12 @@ with open("visualised_results.html", "w") as f:
 	f.write("Визуализирани данни!")
 	f.write("</title>")
 	f.write("<style>")
-	f.write("table, th, td {border: 1px solid black}\na:visited {color: red}\n")
+	f.write("table, th, td {border: 1px solid black}\na:visited {color: red}\nbody table {font-size: 20px;}\n")
 	f.write("table tr:nth-child(2n+3) {background-color: #D6D6D8}")
 	f.write("</style>")
 	f.write("<meta charset='UTF-8'>")
+	f.write("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>")
+	f.write("<script>$(document).ready(function(){$('h1').click(function(){$(this).next().toggle()})})</script>")
 	f.write("</head>")
 	f.write("<body>")
 	for candidates in all_candidates:
