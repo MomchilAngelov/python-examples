@@ -1,3 +1,3 @@
 all: 
-	python3 jobsbg-parser.py
-	python3 jobsbg-visualisor.py
+	python3 jobsbg_parser.py
+	python3 jobsbg_visualisor.py
