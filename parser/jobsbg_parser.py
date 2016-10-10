@@ -1,6 +1,8 @@
 '''
 	Parser and writer to a file
 '''
+# With beatifull soup - 9 minutes ~beatifull soup is faster then the library its build upon - nice :Д
+# 
 
 import re
 import threading
@@ -19,11 +21,9 @@ class NetworkParser(threading.Thread):
         self.end_value = end_value
         self.file_handler = file_handler
         self.parsed_data = []
-        self.soup = ""
 
     def run(self):
         for x in range(self.start_value, self.end_value, 15):
-            print("Making a query in the range: {0} - {1}".format(x, x + 15))
             request = self.http.request('GET', self.url.format(x))
             self.soup = BeautifulSoup(str(request.data, 'utf-8'), 'html.parser')
             for data in self.soup.find_all('a'):
@@ -31,10 +31,13 @@ class NetworkParser(threading.Thread):
                     if data.get('class')[0] == "joblink":
                         temp_list = [data.string, data.get('href')]
                         self.parsed_data.append(temp_list)
+
             THREAD_LOCK.acquire()
+
             for my_list in self.parsed_data:
                 f.write("{0} | {1}\n".format(my_list[0], "https://www.jobs.bg/" + my_list[1]))
             THREAD_LOCK.release()
+            
             self.parsed_data = []
 
 if __name__ == '__main__':
@@ -69,7 +72,12 @@ if __name__ == '__main__':
     					+"%5B%5D=" + str(CITY_DATA[CITY]) + \
                         "&categories%5B%5D=15&all_type=0&all_position_level=1&all_company_type=1"+\
                         "&keyword="
+
     PYTHON_STRING = "https://www.python.org/jobs/?page={0}"
+    '''
+    JOBS_BG_STRING = "https://www.jobs.bg/front_job_search.php?frompage={0}&is_region=&all_cities"\
+    +"=0&all_categories=0&all_type=0&all_position_level=1&all_company_type=1&keyword="
+    '''
 
     JOBS_BG_REGEX_RESULT = re.compile(r'[0-9] - [0-9][0-9] от (\d+)')
     PYTHON_PAGE_REGEX = re.compile(r'\?page=(\d+)')
