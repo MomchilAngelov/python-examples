@@ -8,13 +8,16 @@ def my_excepthook(_type, value, traceback):
 	print("*" * 50)
 
 def abc(a, b):
-	pass
+	print(a/b)
 
 sys.excepthook = my_excepthook
 a = 15
+b = 202
+
+#abc(a)
 try:
 	abc(a)
 except Exception as e:
-	print(e)
+ 	print(e)
+abc(a, b)
 
-print(50/0)
