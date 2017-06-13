@@ -1,3 +1,5 @@
+from time import gmtime, strftime
+
 database_candidates = ['Database candidates']
 php_candidates = ['PHP candidates']
 java_candidates = ['JAVA candidates']
@@ -16,45 +18,33 @@ all_candidates_names = ['database_candidate', 'php_candidate', 'javascript_candi
 						'java_candidate', 'c_candidate', 'python_candidate', 'intern_candidate', 
 							'frontend_candidate',]
 def frontend_candidate(string):
-	if "frontend" in string:
+	if "FrontEnd" in string.upper():
 		return 1
-	if "FrontEnd" in string:
+	if "Front-End" in string.upper():
 		return 1
-	if "Front-End" in string:
-		return 1
-	if "Front End" in string:
-		return 1
-	if "Front end" in string:
-		return 1
-	if "front end" in string:
-		return 1
-	if "front-end" in string:
+	if "Front End" in string.upper():
 		return 1
 	return 0
 
 
 def database_candidate(string):
-	if "MySQL" in string:
+	if "SQL" in string.upper():
 		return 1
-	if "Database" in string:
+	if "MYSQL" in string.upper():
 		return 1
-	if "Data" in string:
+	if "DATA" in string.upper():
+		return 1
+	if "POSTGRE" in string.upper():
 		return 1
 	return 0
 
 def php_candidate(string):
-	if "php" in string:
-		return 1
-	if "PHP" in string:
+	if "PHP" in string.upper():
 		return 1
 	return 0
 
 def java_candidate(string):
-	if "Java " in string:
-		return 1
-	if "java " in string:
-		return 1
-	if "JAVA " in string:
+	if "JAVA " in string.upper():
 		return 1
 	return 0
 
@@ -77,49 +67,29 @@ def c_candidate(string):
 
 
 def javascript_candidate(string):
-	if "Javascript" in string:
+	if "JAVASCRIPT" in string.upper():
 		return 1
-	if "JavaScript" in string:
+	if "ECMASCRIPT" in string.upper():
 		return 1
-	if "javascript" in string:
+	if "ACTIONSCRIPT" in string.upper():
 		return 1
-	if "JAVASCRIPT" in string:
-		return 1
-	if "ECMASCRIPT" in string:
-		return 1
-	if "ACTIONSCRIPT" in string:
-		return 1
-	if "COFFEESCRIPT" in string:
+	if "COFFEESCRIPT" in string.upper():
 		return 1
 	return 0
 
 def python_candidate(string):
-	if "Python" in string:
+	if "PYTHON" in string.upper():
 		return 1
-	if "python" in string:
+	if "DJANGO" in string.upper():
 		return 1
-	if "Django" in string:
-		return 1
-	if "Python/Django" in string:
-		return 1
-	if "django" in string:
+	if "TORNADO" in string.upper():
 		return 1
 	return 0
 
 def intern_candidate(string):
-	if "Стажант" in string:
+	if "СТАЖ" in string.upper():
 		return 1
-	if "Стаж" in string:
-		return 1
-	if "стажант" in string:
-		return 1
-	if "стаж" in string:
-		return 1
-	if "Intern" in string:
-		return 1
-	if "intern" in string:
-		return 1
-	if "INTERN" in string:
+	if "INTERN" in string.upper():
 		return 1
 	return 0
 
@@ -138,7 +108,7 @@ with open("jobsbgparserdata", "r") as f:
 				if eval(name+"(data)"):
 					eval(name+"s.append(data)")
 
-with open("visualised_results.html", "w") as f:
+with open("reports/{0}visualised_results.html".format(strftime("%Y-%m-%d %H:%M:%S", gmtime())), "w") as f:
 	f.write("<html>")
 	f.write("<head>")
 	f.write("<title>")
