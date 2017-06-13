@@ -1,65 +1,93 @@
 class AbstractFactory():
 	
-	def createProduct1(self):
+	def createProductDoor(self, price, quallity):
 		raise NotImplementedError
 
-	def createProduct2(self):
+	def createProductWindow(self, price, quallity):
 		raise NotImplementedError
 
 
 class ConcreteFactoryAudi(AbstractFactory):
 
-	def createProduct1(self):
-		return ConcreteProductAudi().product1()
+	def createProductDoor(self, price, quallity):
+		return ConcreteProductAudi().door(price, quallity)
 
-	def createProduct2(self):
-		return ConcreteProductAudi().product2()
+	def createProductWindow(self, price, quallity):
+		return ConcreteProductAudi().window(price, quallity)
 
 
 class ConcreteFactoryBMW(AbstractFactory):
 
-	def createProduct1(self):
-		return ConcreteProductBMW().product1()
+	def createProductDoor(self, price, quallity):
+		return ConcreteProductBMW().door(price, quallity)
 
-	def createProduct2(self):
-		return ConcreteProductBMW().product2()
+	def createProductWindow(self, price, quallity):
+		return ConcreteProductBMW().window(price, quallity)
 
 
 class AbstractProduct():
 
-	def eat(self):
+	def door(self, price, quallity):
 		raise NotImplementedError
 
-	def sleep(self):
+	def window(self, price, quallity):
 		raise NotImplementedError
+
+	def printProduct(self):
+		print("Price: {0}\tQuallity: {1}".format(self.price, self.quallity))
+
 
 
 class ConcreteProductBMW(AbstractProduct):
 
-	def product1(self):
-		return 'BMW > Audi'
+	def door(self, price, quallity):
+		return BMWDoor(price, quallity)
 
-	def product2(self):
-		return 'BMW > Audi2'
+	def window(self, price, quallity):
+		return BMWWindow(price, quallity)
 
 
 class ConcreteProductAudi(AbstractProduct):
 
-	def product1(self):
-		return 'Audi > BMW'
+	def door(self, price, quallity):
+		return AudiDoor(price, quallity)
 
-	def product2(self):
-		return 'Audi > BMW2'
+	def window(self, price, quallity):
+		return AudoWindow(price, quallity)
 
 
 
-def makeItEasier():
-	print(CONCRETE.createProduct1())
-	print(CONCRETE.createProduct2())
 
+class AudiDoor(AbstractProduct):
+	def __init__(self, price, quallity):
+		self.price = price
+		self.quallity = quallity
+
+
+class AudoWindow(AbstractProduct):
+	def __init__(self, price, quallity):
+		self.price = price
+		self.quallity = quallity
+
+
+class BMWDoor(AbstractProduct):
+	def __init__(self, price, quallity):
+		self.price = price
+		self.quallity = quallity
+
+
+class BMWWindow(AbstractProduct):
+	def __init__(self, price, quallity):
+		self.price = price
+		self.quallity = quallity
+
+
+def makeItEasier(pFactor, qFactor):
+	CONCRETE.createProductDoor(pFactor * 10, qFactor * 20).printProduct()
+	CONCRETE.createProductWindow(pFactor * 20, qFactor * 20).printProduct()
 
 CONCRETE = ConcreteFactoryAudi()
-makeItEasier()
+makeItEasier(10, 1)
 
 CONCRETE = ConcreteFactoryBMW()
-makeItEasier()
+makeItEasier(30, 5)
