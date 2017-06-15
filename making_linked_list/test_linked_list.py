@@ -40,7 +40,7 @@ class TestLinkedListMethod(unittest.TestCase):
 			ll.append(n)
 
 		another_linked_list = linked_list.LinkedList(ll);
-		another_linked_list.append(789)
+		another_linked_list.append(linked_list.Node(789))
 
 		for k in reversed(value):
 			self.assertEqual(k, ll.pop().getData())

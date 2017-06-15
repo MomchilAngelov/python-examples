@@ -2,6 +2,8 @@ class Node():
 
 	def __init__(self, data):
 		self.data = data
+		self.nextNode = None
+		self.previousNode = None
 
 	def appendNext(self, node):
 		self.nextNode = node
@@ -24,15 +26,8 @@ class LinkedList():
 		self.len = 0
 		if other_linked_list:
 			for k in range(other_linked_list.size()):
-				node = other_linked_list.head
-				for i in range(k):
-					node = node.next()
-				if self.size() == 0:
-					self.tail = node
-					self.head = node
-				else:
-					self.head.append(node)
-
+				node = other_linked_list.getFirst()
+				self.append(node)
 
 	def size(self):
 		return self.len
@@ -52,6 +47,19 @@ class LinkedList():
 
 	def pop(self):
 		node = self.head
-		self.head.prev().appendNext(self.tail)
+
+		if self.head.prev():
+			self.head.prev().appendNext(None)
 		self.head = self.head.prev()
+
+		return node
+
+	def getFirst(self):
+		node = self.tail
+
+		if self.tail.next():
+			self.tail.next().prependPrevious(None)
+		
+		self.tail = self.tail.next()
+
 		return node
